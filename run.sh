@@ -16,12 +16,16 @@ if ! container images list 2>/dev/null | grep -q "$IMAGE"; then
   container build -t "$IMAGE" -f "$SCRIPT_DIR/Containerfile" "$SCRIPT_DIR"
 fi
 
+# Copy AGENTS.md to project if not already present
+if [ ! -f "$PROJECT/AGENTS.md" ]; then
+  cp "$SCRIPT_DIR/AGENTS.md" "$PROJECT/AGENTS.md"
+fi
+
 echo "Starting Pi in: $PROJECT"
 
 container run --rm -it \
   --mount "type=bind,source=$PROJECT,destination=/workspace" \
-  --mount "type=bind,source=$SCRIPT_DIR/models.json,destination=/root/.config/pi/models.json,readonly" \
-  --mount "type=bind,source=$SCRIPT_DIR/AGENTS.md,destination=/workspace/AGENTS.md,readonly" \
+  --mount "type=bind,source=$SCRIPT_DIR/config,destination=/root/.config/pi,readonly" \
   --mount "type=bind,source=$OBSIDIAN,destination=/obsidian,readonly" \
   "$IMAGE" \
   pi
