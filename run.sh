@@ -25,7 +25,7 @@ echo "Starting Pi in: $PROJECT"
 
 container run --rm -it \
   --mount "type=bind,source=$PROJECT,destination=/workspace" \
-  --mount "type=bind,source=$SCRIPT_DIR/config,destination=/root/.config/pi,readonly" \
+  --mount "type=bind,source=$SCRIPT_DIR/config,destination=/root/.pi/agent,readonly" \
   --mount "type=bind,source=$OBSIDIAN,destination=/obsidian,readonly" \
   "$IMAGE" \
   pi
